@@ -10,13 +10,13 @@ export class Constants {
     };
 
     public static DATA_LOCAL = {
-        insertPedido: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/pedido',
-        insertDetalle: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/detalle',
-        updatePedido: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/detallePedido',
-        obtenerPedido: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/obtenerPedido',
-        obtenerPedidoDetalle: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/obtenerdetallePedido',
-        insertarDetalleVisa: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/visaconnect',
-        getPedido: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/get_pedido',
-        deletePedido: 'http://desapache2.indecopi.gob.pe/pasarela/visanet/del_pedido'
+        insertPedido: 'http://159.89.121.195:8080/pasarelawar/visanet/pedido',
+        insertDetalle: 'http://159.89.121.195:8080/pasarelawar/visanet/detalle',
+        updatePedido: 'http://159.89.121.195:8080/pasarelawar/visanet/detallePedido',
+        obtenerPedido: 'http://159.89.121.195:8080/pasarelawar/visanet/obtenerPedido',
+        obtenerPedidoDetalle: 'http://159.89.121.195:8080/pasarelawar/visanet/obtenerdetallePedido',
+        insertarDetalleVisa: 'http://159.89.121.195:8080/pasarelawar/visanet/visaconnect',
+        getPedido: 'http://159.89.121.195:8080/pasarelawar/visanet/get_pedido',
+        deletePedido: 'http://159.89.121.195:8080/pasarelawar/visanet/del_pedido'
     }
 }
