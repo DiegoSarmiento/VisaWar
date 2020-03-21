@@ -187,11 +187,20 @@
           <!-- 0 - NumPedido_detalle; 1 - NumPedido;  2 VC_DESCRIPCION; 3 NU_PRECIO; 4 NU_CANTIDAD ; 5 NU_TOTAL, 6 DT_FECHA_REGISTRO, 7 VC_USUARIO_REGISTRO, 8 VC_HOSTNAME_REGISTRO, 9 CH_ESTADO -->
           <!-- <p>Detalle2: {{data_dt[0]}}</p> -->
         </div> 
+        <br>
+        <div class="row container">
+          <div class="col-6 d-flex justify-content-start"></div>
+          <div class="col-2 d-flex justify-content-center"></div>
+          <div class="col-2 d-flex justify-content-center">TOTAL: </div>
+          <div class="col-2 d-flex justify-content-end">{{data_cabecera[0][1]}}</div>
+          <!-- 0 - NumPedido_detalle; 1 - NumPedido;  2 VC_DESCRIPCION; 3 NU_PRECIO; 4 NU_CANTIDAD ; 5 NU_TOTAL, 6 DT_FECHA_REGISTRO, 7 VC_USUARIO_REGISTRO, 8 VC_HOSTNAME_REGISTRO, 9 CH_ESTADO -->
+          <!-- <p>Detalle2: {{data_dt[0]}}</p> -->
+        </div> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()">Cancelar</button>
         <div id="btn_pago">
-          <form method="POST" action="http://localhost:8081/visanet/visaconnect?num_pedido_res={{numero_pedido_f}}" id="boton_pago">
+          <form method="POST" action="{{url_visa}}?num_pedido_res={{numero_pedido_f}}" id="boton_pago">
             </form>
         </div>
       </div>

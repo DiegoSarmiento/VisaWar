@@ -1,3 +1,5 @@
+import { environment } from '../../environments/environment';
+
 export class Constants {
 
     public static DATA_VISA = {
@@ -10,13 +12,13 @@ export class Constants {
     };
 
     public static DATA_LOCAL = {
-        insertPedido: 'http://159.89.121.195:8080/pasarelawar/visanet/pedido',
-        insertDetalle: 'http://159.89.121.195:8080/pasarelawar/visanet/detalle',
-        updatePedido: 'http://159.89.121.195:8080/pasarelawar/visanet/detallePedido',
-        obtenerPedido: 'http://159.89.121.195:8080/pasarelawar/visanet/obtenerPedido',
-        obtenerPedidoDetalle: 'http://159.89.121.195:8080/pasarelawar/visanet/obtenerdetallePedido',
-        insertarDetalleVisa: 'http://159.89.121.195:8080/pasarelawar/visanet/visaconnect',
-        getPedido: 'http://159.89.121.195:8080/pasarelawar/visanet/get_pedido',
-        deletePedido: 'http://159.89.121.195:8080/pasarelawar/visanet/del_pedido'
+        insertPedido: environment.url +'/visanet/pedido',
+        insertDetalle: environment.url + '/visanet/detalle',
+        updatePedido: environment.url + '/visanet/detallePedido',
+        obtenerPedido: environment.url + '/visanet/obtenerPedido',
+        obtenerPedidoDetalle: environment.url + '/visanet/obtenerdetallePedido',
+        insertarDetalleVisa: environment.url + '/visanet/visaconnect',
+        getPedido: environment.url + '/visanet/get_pedido',
+        deletePedido: environment.url + '/visanet/del_pedido'
     }
 }

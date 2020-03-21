@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  "url": "http://localhost:8081"
+  "url": "http://159.89.121.195:8080/pasarela"
 };
 
 /*

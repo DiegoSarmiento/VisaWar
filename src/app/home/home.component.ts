@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
   numero_pedido_f;
   precio_total_f;
   hora_pedido_f;
-
+  url_visa = Constants.DATA_LOCAL.insertarDetalleVisa;
   ngOnInit() {
     this.mostrarResponse();
     this.crearFormulario();

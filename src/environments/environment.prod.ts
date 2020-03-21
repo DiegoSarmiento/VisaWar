@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  "url_prod": "http://desapache2.indecopi.gob.pe/pasarela"
+  "url": "http://159.89.121.195:8080/pasarela"
 };
