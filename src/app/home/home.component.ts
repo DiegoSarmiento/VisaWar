@@ -10,7 +10,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [NgxSpinnerService]
 })
 export class HomeComponent implements OnInit {
 
