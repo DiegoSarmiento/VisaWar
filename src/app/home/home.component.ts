@@ -250,12 +250,12 @@ export class HomeComponent implements OnInit {
     let body = "num_pedido_res="+num_pedido;
     await this.httpClient.put(Constants.DATA_LOCAL.updatePedido, body, {headers: this.getHeaders()}).subscribe(res_data => {
     //  localStorage.setItem('numero_pedido',"");
-      window.open("http://localhost:4200/");
+      window.open("http://159.89.121.195/");
     });
   }
 
   async updatePagina(){
-    window.open("http://localhost:4200/");
+    window.open("http://159.89.121.195/");
   }
 
   private getHeaders(): HttpHeaders {
