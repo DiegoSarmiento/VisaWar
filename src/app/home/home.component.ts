@@ -1,4 +1,4 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constants } from '../../assets/utils/constants';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
@@ -6,7 +6,6 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { NgxSpinnerService } from "ngx-spinner";
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-home',
