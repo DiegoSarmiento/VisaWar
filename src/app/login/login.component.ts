@@ -22,7 +22,7 @@ export class LoginComponent {
     await this.httpClient.post(Constants.DATA_LOCAL.loginUsuario, body, {headers: this.getHeaders()}).subscribe(async res_data => {
       if (res_data == 1) {
         await localStorage.setItem('data_user',this.user);
-        await this.router.navigate(['/home']);
+        await this.router.navigate(['']);
       }else{
         this.error_login = true;
       }
