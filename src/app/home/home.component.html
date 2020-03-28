@@ -1,3 +1,4 @@
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,9 @@
   </head>
   
   <body>
+    <ngx-spinner bdColor="rgba(255, 255, 255, 1)">
+      <img src='../../assets/img/source.gif'/>
+    </ngx-spinner>
     <div class="container-fluid px-5">
      <div class="row">
       <div class="col-8">
@@ -54,7 +58,7 @@
                       </div>
                       <div class="col-2">
                         <div class="form-group">
-                          <input type="number" min="1" class="form-control" [formControl]="items.controls.precio" (change)="calcular_total(items.controls)" required/>
+                          <input type="text" min="1" class="form-control" [formControl]="items.controls.precio" (change)="calcular_total(items.controls)" required/>
                         </div>
                       </div>
                       <div class="col-2">
@@ -119,7 +123,11 @@
                   </div>
                   <div class="col-7 align-self-center" style="margin-top: 8px;">
                     <div class="form-group">
-                      <textarea name="data_visanet" [(ngModel)]="data_visanet" cols="80" rows="5"></textarea>
+                      <textarea name="data_visanet" cols="80" rows="5">
+                        {{response_pedido}} ---------------
+                        {{response_detalle}} ----------------
+                        {{response_visa}} -----------------
+                      </textarea>
                    </div>
                   </div>
                 </div>
@@ -129,57 +137,60 @@
       </div>
   
       <!-- Region Modal  -->
-      <ng-template #modalTeryCon let-modal>
+
+      <ng-template #modalTeryCon>
+        
         <div class="modal-header">
             <h4 class="modal-title">
-                <img src="../assets/img/INDECOPI.jpg" alt="Indecopi" style="width: 200px;">
+                <img src="../assets/img/INDECOPI.jpg" alt="Indecopi" style="width: 100px;">
             </h4>
             <button type="button" class="close" aria-label="Close" (click)="updatePedidoDetalle()">
               <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam mollitia a assumenda ipsam, perferendis commodi nostrum nam, harum ducimus dolor placeat amet! Dolorem animi adipisci iusto laboriosam atque possimus quaerat.</p>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam nihil consectetur laboriosam at, optio dolor harum repudiandae! Quam sequi, commodi nam perspiciatis ab illo consequatur molestias officia non quo veniam</p>
-              <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, consectetur optio aliquid adipisci aliquam ducimus possimus repellat exercitationem, maxime earum, vitae vel explicabo. Ad voluptates aliquid doloremque recusandae cupiditate</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste nulla voluptates iusto et, animi labore laudantium maiores voluptatem corrupti veritatis asperiores hic ab nesciunt odio autem facere explicabo ipsa possimus?</p> 
+          <div class="row">
+            <h1>Terminos y condiciones</h1>
+          </div>
+          <div class="row">
+            <p>{{data_terminos}}</p>
+            </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()">Cancelar</button>
             <button type="button" class="btn btn-light" (click)="showModalDetalle(modaldetalle,modalTeryCon)">Aceptar</button>
         </div>
+
     </ng-template>
-      
+
     <ng-template #modaldetalle let-modal>
-      <div class="modal-header pl-0 pr-0">
+      <div class="modal-header">
         <div class="row container p-0">
           <div class="col-3">
             <h4 class="modal-title">
-              <img src="../assets/img/INDECOPI.jpg" alt="Indecopi" style="width: 200px;">
+              <img src="../assets/img/INDECOPI.jpg" alt="Indecopi" style="width: 100px;">
             </h4>
           </div>
-          <div class="col-9 d-flex justify-content-end">
-            <div class="row container">
-              <div class="col-12 d-flex justify-content-end">Fecha: {{data_cabecera[0][2]}}</div>
+          <div class="col-9 pr-0 d-flex justify-content-end">
+            <div class="row">
+              <div class="col-12 d-flex justify-content-end" style="height: 24px;">Fecha: {{data_cabecera[0][2]}}</div>
               <div class="col-12 d-flex justify-content-end">Hora: {{hora_pedido_f}}</div>
             </div>
           </div>
-        <!-- <div class="col-1">
-          <button type="button" class="close" aria-label="Close" (click)="updatePedidoDetalle()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div> -->
+          <div class="col-12 d-flex justify-content-start">
+            <p style="font-weight: bold; margin-bottom: 0px; font-size: 22px;">Nro. de Pedido: {{data_cabecera[0][0]}}</p>
+          </div>
         </div>
       </div>
       <div class="modal-body">
-        <div class="row container">
+        <div class="row">
           <div class="col-6 d-flex justify-content-start">Items/Concepto</div>
           <div class="col-2 d-flex justify-content-center">Cantidad</div>
           <div class="col-2 d-flex justify-content-center">Precio</div>
           <div class="col-2 d-flex justify-content-end">Total</div>
         </div>
         <hr>
-        <div class="row container" *ngFor="let data_dt of data_detalle">
+        <div class="row" *ngFor="let data_dt of data_detalle">
           <div class="col-6 d-flex justify-content-start">{{data_dt[2]}}</div>
           <div class="col-2 d-flex justify-content-center">{{data_dt[4]}}</div>
           <div class="col-2 d-flex justify-content-center">{{data_dt[3]}}</div>
@@ -188,7 +199,7 @@
           <!-- <p>Detalle2: {{data_dt[0]}}</p> -->
         </div> 
         <br>
-        <div class="row container">
+        <div class="row">
           <div class="col-6 d-flex justify-content-start"></div>
           <div class="col-2 d-flex justify-content-center"></div>
           <div class="col-2 d-flex justify-content-center">TOTAL: </div>
@@ -198,9 +209,9 @@
         </div> 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()">Cancelar</button>
+        <button type="button" class="btn btn-dark" style="padding-top: 5px; padding-bottom: 5px; height: 41px; margin-bottom: 5px; width: 187px;" (click)="updatePedidoDetalle()">Cancelar</button>
         <div id="btn_pago">
-          <form method="POST" action="{{url_visa}}?num_pedido_res={{numero_pedido_f}}" id="boton_pago">
+          <form method="POST" action="{{url_visa}}?num_pedido_res={{numero_pedido_f}}&usuario={{usuario_name}}&host=Diego" id="boton_pago" (click)="showloader()">
             </form>
         </div>
       </div>
@@ -209,3 +220,6 @@
   
     </div>
   </body>
+
+  <!-- Spinner -->
+

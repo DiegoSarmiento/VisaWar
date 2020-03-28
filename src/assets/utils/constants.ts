@@ -19,6 +19,9 @@ export class Constants {
         obtenerPedidoDetalle: environment.url + '/visanet/obtenerdetallePedido',
         insertarDetalleVisa: environment.url + '/visanet/visaconnect',
         getPedido: environment.url + '/visanet/get_pedido',
-        deletePedido: environment.url + '/visanet/del_pedido'
+        deletePedido: environment.url + '/visanet/del_pedido',
+        loginUsuario: environment.url + '/visanet/obtenerDatosUsuario',
+        terminosycondiciones: environment.url + '/visanet/obtenerterycon',
+        obtenerResVisa: environment.url + '/visanet/obtenerResVisa'
     }
 }

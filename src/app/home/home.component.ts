@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@ang
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { NgxSpinnerService } from "ngx-spinner";
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,7 @@ import * as moment from 'moment';
 export class HomeComponent implements OnInit {
 
     constructor(
+    private spinner: NgxSpinnerService,
     private router: Router,
     private httpClient: HttpClient,
     private modalService: NgbModal,
@@ -24,7 +27,6 @@ export class HomeComponent implements OnInit {
 
   
   //Data Formulario
-  data_visanet: string = "";
   formulario: FormGroup;
   token_data: string;
   session_data: string;
@@ -32,34 +34,49 @@ export class HomeComponent implements OnInit {
   precio_final: number = 0;
   flagPrecioTotal: boolean = false;
   flagRespuestaVisa: boolean = false;
+  data_terminos: string = "";
   data_cabecera;
   data_detalle;
   numero_pedido_f;
   precio_total_f;
   hora_pedido_f;
   url_visa = Constants.DATA_LOCAL.insertarDetalleVisa;
+  usuario_name;
+  response_detalle;
+  response_pedido;
+  response_visa;
+
   ngOnInit() {
     this.mostrarResponse();
     this.crearFormulario();
     this.anadirLista();
+    this.obtenerUsuario();
+  }
+
+  async obtenerUsuario(){
+    this.usuario_name = await localStorage.getItem('data_user');
   }
 
   async mostrarResponse(){
     let num_pedido = await localStorage.getItem('numero_pedido');
-    console.log("num_pedido",num_pedido);
     if (num_pedido != "" && num_pedido != null) {
       this.flagRespuestaVisa = true;
-      await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data => {
-        let Data_final = res_data;
-        this.data_visanet = Data_final[0][8]
-        console.log('DA',Data_final[0]);
-        localStorage.removeItem('numero_pedido');
+      await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_pedido => {
+        this.response_pedido = res_data_pedido;
+        await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_detalle => {
+          this.response_detalle = res_data_detalle;
+          await this.httpClient.get(Constants.DATA_LOCAL.obtenerResVisa+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_visa => {
+            this.response_visa = res_visa;
+            localStorage.removeItem("numero_pedido");
+          });
+        });
       });
 
     }
   }
 
   async getToken(modal){ 
+  await this.spinner.show();
   let headers = new HttpHeaders();
   headers = headers.append('Authorization', 'Basic aW50ZWdyYWNpb25lcy52aXNhbmV0QG5lY29tcGx1cy5jb206ZDVlN25rJE0=');
   headers = headers.append('Accept', `*/*`);
@@ -103,6 +120,7 @@ export class HomeComponent implements OnInit {
     scriptEl.setAttribute('data-purchasenumber', this.numero_pedido_f);
     scriptEl.setAttribute('data-channel', 'web');
     scriptEl.setAttribute('data-amount', precio_fixed);
+    scriptEl.setAttribute('data-merchantlogo', "https://www.indecopi.gob.pe/image/layout_set_logo?img_id=3224595&t=1585113168475");
     scriptEl.setAttribute('data-timeouturl', Constants.DATA_LOCAL.insertarDetalleVisa);
     console.log('scriptEl',scriptEl);
     document.getElementById("boton_pago").appendChild(scriptEl);
@@ -142,22 +160,24 @@ export class HomeComponent implements OnInit {
     this.flagPrecioTotal = false;
     this.flagRespuestaVisa = false;
     let cantidad = parseInt(item['cantidad'].value);
-    let precio = parseInt(item['precio'].value);
-    item['total'].setValue(cantidad * precio);
+    let precio = parseFloat(item['precio'].value);
+    let subtotalProd = cantidad * precio;
+    item['total'].setValue(subtotalProd.toFixed(2));
   }
 
   abrirModal(modal){
     this.modalService.open(modal, { 
-      size: 'xl',
+      size: 'lg',
       scrollable: true,
-      backdrop: false
+      backdrop: false,
+      windowClass: 'backdr'
     });
   }
 
   async totalizar(){
     this.precio_final = 0;
     for (let index = 0; index < this.formularioVisa.controls.length ; index++) {
-       this.precio_final = this.precio_final + parseInt(this.formularioVisa.controls[index].value['total']);
+       this.precio_final = (this.precio_final + parseFloat(this.formularioVisa.controls[index].value['total']));
     };
     this.flagPrecioTotal = true;
     this.flagRespuestaVisa = true;
@@ -175,7 +195,8 @@ export class HomeComponent implements OnInit {
 
   //Region Http Spring Rest
   async insertPedido(modal){
-    let body = "precio_final="+this.precio_final.toString()+"&token="+this.token_data+"&usuario=Diego&host=Diego";
+    var usuario = localStorage.getItem('data_user');
+    let body = "precio_final="+this.precio_final.toString()+"&token="+this.token_data+"&usuario="+usuario+"&host=Diego";
     await this.httpClient.post(Constants.DATA_LOCAL.insertPedido, body, {headers: this.getHeaders()}).subscribe(
       async num_pedido_res => {
         localStorage.setItem('numero_pedido', num_pedido_res.toString());
@@ -185,31 +206,36 @@ export class HomeComponent implements OnInit {
           let precio = this.formularioVisa.controls[i]['controls'].precio.value;
           let cantidad = this.formularioVisa.controls[i]['controls'].cantidad.value;
           let total = this.formularioVisa.controls[i]['controls'].total.value;
-          let body = "num_pedido_res="+num_pedido_res+"&producto="+producto.toString()+"&precio="+precio+"&cantidad="+cantidad+"&total="+total+"&usuario=Diego&host=Diego";
+          let body = "num_pedido_res="+num_pedido_res+"&producto="+producto.toString()+"&precio="+precio.toString()+"&cantidad="+cantidad+"&total="+total.toString()+"&usuario="+usuario+"&host=Diego";
           await this.httpClient.post(Constants.DATA_LOCAL.insertDetalle, body, {headers: this.getHeaders()}).subscribe(res_data => {
             console.log("res_data",res_data);
           });
         }
-        await this.abrirModal(modal);
+        await this.httpClient.get(Constants.DATA_LOCAL.terminosycondiciones, {headers: this.getHeadersText(), responseType: 'text'}).subscribe(async res_data => {
+          this.data_terminos = res_data.toString(); 
+          await this.spinner.hide();
+          await this.abrirModal(modal);
+        });
       }
-      );
-    
+    );
   }
 
   async showModalDetalle(modaldetalle,modalTeryCon){
+    await this.spinner.show();
     await this.cerrarModal(modalTeryCon);
     let num_pedido = await localStorage.getItem('numero_pedido');
     console.log('num_pedido',num_pedido);
     await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data => {
       this.data_cabecera = res_data;
       console.log("rest_",res_data);
-      this.hora_pedido_f = moment(this.data_cabecera[0][2]).add(-5, 'hours').format('HH:mm:ss');
-      this.data_cabecera[0][2] = moment(this.data_cabecera[0][2]).add(-5, 'hours').format('DD/MM/YYYY');
+      this.hora_pedido_f = moment(this.data_cabecera[0][2]).format('HH:mm:ss');
+      this.data_cabecera[0][2] = moment(this.data_cabecera[0][2]).format('DD/MM/YYYY');
       this.numero_pedido_f = this.data_cabecera[0][0];
       this.precio_total_f = this.data_cabecera[0][1];
       //0 - NumPedido; 1 - Total Valor; 2 Fecha; 3 Usuario; 4 Hostname ; 5 Estado;
       await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data => {
         this.data_detalle = res_data;
+        await this.spinner.hide();
         //0 - NumPedido_detalle; 1 - NumPedido;  2 VC_DESCRIPCION; 3 NU_PRECIO; 4 NU_CANTIDAD ; 5 NU_TOTAL, 6 DT_FECHA_REGISTRO, 7 VC_USUARIO_REGISTRO, 8 VC_HOSTNAME_REGISTRO, 9 CH_ESTADO
         await this.abrirModal(modaldetalle);
         await this.generarBoton();
@@ -224,12 +250,12 @@ export class HomeComponent implements OnInit {
     let body = "num_pedido_res="+num_pedido;
     await this.httpClient.put(Constants.DATA_LOCAL.updatePedido, body, {headers: this.getHeaders()}).subscribe(res_data => {
     //  localStorage.setItem('numero_pedido',"");
-      window.location.reload();
+      window.open("http://localhost:4200/");
     });
   }
 
   async updatePagina(){
-    window.location.reload();
+    window.open("http://localhost:4200/");
   }
 
   private getHeaders(): HttpHeaders {
@@ -237,4 +263,15 @@ export class HomeComponent implements OnInit {
     header = header.append('Content-Type', 'application/x-www-form-urlencoded');
     return header;
   }
+
+  private getHeadersText(): HttpHeaders {
+    let header = new HttpHeaders();
+    header = header.append('Content-Type', 'text/plain');
+    return header;
+  }
+
+  async showloader(){
+    await this.spinner.show();
+  }
 }
+

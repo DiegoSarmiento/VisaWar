@@ -2,9 +2,16 @@
     <div class="form">
       <form class="login-form">
           <h3>Visa Indecopi</h3>
-        <input [(ngModel)]="user" name="user" type="text" placeholder="Usuario"/>
-        <input [(ngModel)]="pass" name="pass" type="password" placeholder="Contraseña"/>
+        <input [(ngModel)]="user" name="user" type="text" placeholder="Usuario" (ngModelChange)="cerrar_alert()"/>
+        <input [(ngModel)]="pass" name="pass" type="password" placeholder="Contraseña" (ngModelChange)="cerrar_alert()"/>
         <button (click)="inicia_sesion()">login</button>
+        <div *ngIf="error_login">
+          <div><br></div>
+          <div class="alert">
+            <span class="closebtn" (click)="cerrar_alert()">&times;</span>
+            Usuario/Contraseña Incorrecta
+          </div>
+        </div>
       </form>
     </div>
   </div>
