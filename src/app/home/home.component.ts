@@ -45,11 +45,13 @@ export class HomeComponent implements OnInit {
   response_detalle;
   response_pedido;
   response_visa;
+  btn_pagar:boolean = true;
+  aceptado: boolean = true;
 
+  disa:boolean = false;
   ngOnInit() {
     this.mostrarResponse();
     this.crearFormulario();
-    this.anadirLista();
     this.obtenerUsuario();
   }
 
@@ -60,23 +62,39 @@ export class HomeComponent implements OnInit {
   async mostrarResponse(){
     let num_pedido = await localStorage.getItem('numero_pedido');
     if (num_pedido != "" && num_pedido != null) {
-      this.flagRespuestaVisa = true;
-      await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_pedido => {
-        this.response_pedido = res_data_pedido;
-        await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_detalle => {
-          this.response_detalle = res_data_detalle;
-          await this.httpClient.get(Constants.DATA_LOCAL.obtenerResVisa+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_visa => {
-            this.response_visa = res_visa;
-            localStorage.removeItem("numero_pedido");
+      await this.httpClient.get(Constants.DATA_LOCAL.obtenerResVisa+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_visa => {
+        this.response_visa = res_data_visa;
+        await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_pedido => {
+          this.response_pedido = res_data_pedido;
+          await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_detalle => {
+            this.response_detalle = res_detalle;
+            if (this.response_visa.length == 0 ) {
+              this.flagRespuestaVisa = false;
+              this.anadirLista('','','','');
+            }else{
+              var tam_obj = Object.keys(res_detalle).length;
+              for (let i = 0; i < tam_obj; i++) {
+                this.anadirLista(res_detalle[i][2],res_detalle[i][4],res_detalle[i][3],res_detalle[i][5]);
+              }
+              this.precio_final = this.response_pedido[0][1];
+              this.flagPrecioTotal = true;
+              this.flagRespuestaVisa = true;
+              this.response_visa = JSON.parse(this.response_visa[0][1].toString());
+              if (this.response_visa["errorCode"]) {
+                this.aceptado = false;
+              }
+              localStorage.removeItem('numero_pedido');
+            }
           });
         });
       });
-
+    }else{
+      console.log("this.flagRespuestaVisa",this.flagRespuestaVisa);
+      this.anadirLista('','','','');
     }
   }
 
-  async getToken(modal){ 
-  await this.spinner.show();
+  async getToken(modal){
   let headers = new HttpHeaders();
   headers = headers.append('Authorization', 'Basic aW50ZWdyYWNpb25lcy52aXNhbmV0QG5lY29tcGx1cy5jb206ZDVlN25rJE0=');
   headers = headers.append('Accept', `*/*`);
@@ -122,7 +140,8 @@ export class HomeComponent implements OnInit {
     scriptEl.setAttribute('data-amount', precio_fixed);
     scriptEl.setAttribute('data-merchantlogo', "https://www.indecopi.gob.pe/image/layout_set_logo?img_id=3224595&t=1585113168475");
     scriptEl.setAttribute('data-timeouturl', Constants.DATA_LOCAL.insertarDetalleVisa);
-    console.log('scriptEl',scriptEl);
+    scriptEl.setAttribute('data-formbuttoncolor', "#9e004f");
+    console.log(scriptEl);
     document.getElementById("boton_pago").appendChild(scriptEl);
   }
 
@@ -137,15 +156,18 @@ export class HomeComponent implements OnInit {
     return this.formulario.get('formularioVisa') as FormArray;
   }
 
-  anadirLista() {
+  anadirLista(producto, precio, cantidad, total) {
     this.flagPrecioTotal = false;
-    this.flagRespuestaVisa = false;
+    console.log("producto, precio, cantidad, total",producto, precio, cantidad, total);
+    if (producto != "" && precio!="" && cantidad!="" && total!="" ) {
+      this.disa = true;
+    }
     if (this.formularioVisa.length < 5) {
       const trabajo = this.fb.group({
-        producto: new FormControl('', Validators.required),
-        precio: new FormControl('0',Validators.required),
-        cantidad: new FormControl('0',Validators.required),
-        total: new FormControl('0',Validators.required)
+        producto: new FormControl({value: producto, disabled: this.disa}),
+        precio: new FormControl({value: precio,disabled: this.disa}),
+        cantidad: new FormControl({value: cantidad,disabled: this.disa}),
+        total: new FormControl({value: total,disabled: this.disa})
       });
       this.formularioVisa.push(trabajo);
       console.log(this.formularioVisa.controls);
@@ -170,17 +192,20 @@ export class HomeComponent implements OnInit {
       size: 'lg',
       scrollable: true,
       backdrop: false,
-      windowClass: 'backdr'
+      centered: true
     });
   }
 
   async totalizar(){
     this.precio_final = 0;
     for (let index = 0; index < this.formularioVisa.controls.length ; index++) {
-       this.precio_final = (this.precio_final + parseFloat(this.formularioVisa.controls[index].value['total']));
+      console.log("this.precio_final",this.precio_final );
+      console.log("this.precio_final2",parseFloat(this.formularioVisa.controls[index].value['total']));
+      this.formularioVisa.controls[index].disable();
+      this.btn_pagar = false;
+      this.precio_final = (this.precio_final + parseFloat(this.formularioVisa.controls[index].value['total']));
     };
     this.flagPrecioTotal = true;
-    this.flagRespuestaVisa = true;
   }
 
   cerrarModal(modal){
@@ -213,7 +238,6 @@ export class HomeComponent implements OnInit {
         }
         await this.httpClient.get(Constants.DATA_LOCAL.terminosycondiciones, {headers: this.getHeadersText(), responseType: 'text'}).subscribe(async res_data => {
           this.data_terminos = res_data.toString(); 
-          await this.spinner.hide();
           await this.abrirModal(modal);
         });
       }
@@ -221,7 +245,6 @@ export class HomeComponent implements OnInit {
   }
 
   async showModalDetalle(modaldetalle,modalTeryCon){
-    await this.spinner.show();
     await this.cerrarModal(modalTeryCon);
     let num_pedido = await localStorage.getItem('numero_pedido');
     console.log('num_pedido',num_pedido);
@@ -235,7 +258,6 @@ export class HomeComponent implements OnInit {
       //0 - NumPedido; 1 - Total Valor; 2 Fecha; 3 Usuario; 4 Hostname ; 5 Estado;
       await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data => {
         this.data_detalle = res_data;
-        await this.spinner.hide();
         //0 - NumPedido_detalle; 1 - NumPedido;  2 VC_DESCRIPCION; 3 NU_PRECIO; 4 NU_CANTIDAD ; 5 NU_TOTAL, 6 DT_FECHA_REGISTRO, 7 VC_USUARIO_REGISTRO, 8 VC_HOSTNAME_REGISTRO, 9 CH_ESTADO
         await this.abrirModal(modaldetalle);
         await this.generarBoton();
@@ -273,5 +295,6 @@ export class HomeComponent implements OnInit {
   async showloader(){
     await this.spinner.show();
   }
+
 }
 

@@ -10,16 +10,17 @@
   </head>
   
   <body>
-    <ngx-spinner bdColor="rgba(255, 255, 255, 1)">
+    <ngx-spinner bdColor="rgba(0,0,0,0)" fullScreen="false" >
       <img src='../../assets/img/source.gif'/>
     </ngx-spinner>
     <div class="container-fluid px-5">
      <div class="row">
-      <div class="col-8">
-        <h1>VisaNet</h1>
-      </div>
-      <div class="col-4 d-flex justify-content-end">
+
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end justify-content-sm-end justify-content-md-end justify-content-lg-end justify-content-xl-end mb-1">
         <button type="button" class="btn btn-outline-dark button_sesion" (click)="cerrar_sesion()">Cerrar Sesion</button>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h1 class="text-center text-sm-center text-md-center text-lg-left text-xl-left">VisaNet</h1>
       </div>
      </div>
       
@@ -27,74 +28,82 @@
         <div class="col-md-12">
           <div class="card">
             
-            <form class="col-12" style="margin-top: 10px;">
+            <!-- <form class="col-12" style="margin-top: 10px;">
               <div class="row">
-                <div class="col-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                   <label>Productos:</label><br />
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                   <label>Cantidad:</label><br />
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                   <label>Precio:</label><br />
                 </div>
-                <div class="col-4 text-left">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 text-left">
                   <label>Total:</label><br />
                 </div>
               </div>
+            </form> -->
+            <form class="col-12 pt-2">
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                  <label>Items:</label><br />
+                </div>
+                </div>
             </form>
                 <form [formGroup]="formulario" class="col-12" style="margin-top: 10px;">
                   <div formArrayName="formularioVisa">
-                    <div *ngFor="let items of formularioVisa.controls; let i = index;" class="row">
-                      <div class="col-4">
+                    <div *ngFor="let items of formularioVisa.controls; let i = index;" class="row ">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <div class="form-group">
-                          <input type="text" class="form-control" [formControl]="items.controls.producto" required minlength="4"/>
+                          <input type="text" class="form-control" [formControl]="items.controls.producto" placeholder="Producto" [disabled]="!btn_pagar"  minlength="4"/>
                         </div>
                       </div>
-                      <div class="col-2">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <input type="number" min="1" class="form-control" [formControl]="items.controls.cantidad" (change)="calcular_total(items.controls)" required/>
+                          <input type="number" min="1" class="form-control" [formControl]="items.controls.cantidad" placeholder="Cantidad" (change)="calcular_total(items.controls)" [disabled]="!btn_pagar"/>
                         </div>
                       </div>
-                      <div class="col-2">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <input type="text" min="1" class="form-control" [formControl]="items.controls.precio" (change)="calcular_total(items.controls)" required/>
+                          <input type="text" min="1" class="form-control" [formControl]="items.controls.precio" placeholder="Precio" (change)="calcular_total(items.controls)" [disabled]="!btn_pagar"/>
                         </div>
                       </div>
-                      <div class="col-2">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <input type="text" class="form-control" [formControl]="items.controls.total" disabled/>
+                          <input type="text" class="form-control" [formControl]="items.controls.total" placeholder="Total" disabled/>
                         </div>
                       </div>
-                      <div class="col-2">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <button type="button" class="btn btn-light w-100"  style="max-width: 100%; width: 152px;" (click)="borrarLista(i)">Eliminar</button>
+                          <button type="button" class="btn btn-light w-100"  style="max-width: 100%; width: 152px;" (click)="borrarLista(i)" [disabled]="flagRespuestaVisa || !btn_pagar">Eliminar</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </form>
-           
-                <div class="row container">
-                  <div class="col-6 col-sm-6 col-md-3 col-lg-2 col-md-2">
-                    <div class="form-group text-center">
-                      <button type="button" class="btn btn-light"  style="max-width: 100%; width: 152px;" (click)="anadirLista()">Añadir</button>
+                <form class="col-12" *ngIf="!flagRespuestaVisa">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-md-2">
+                      <div class="form-group text-center">
+                        <button type="button" class="btn btn-light w-100" [disabled]="flagRespuestaVisa || !btn_pagar" (click)="anadirLista('','','','')">Añadir</button>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-md-2">
+                      <div class="form-group text-center">
+                        <button type="button" class="btn btn-light w-100" [disabled]="flagRespuestaVisa || !btn_pagar" (click)="totalizar()">Totalizar</button>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-6 col-sm-6 col-md-3 col-lg-2 col-md-2">
-                    <div class="form-group text-center">
-                      <button type="button" class="btn btn-light" style="max-width: 100%; width: 152px;" (click)="totalizar()">Totalizar</button>
-                    </div>
-                  </div>
-                </div>
-                <form class="col-12" style="margin-top: 10px;">
-                  <div class="d-flex justify-content-end" *ngIf="flagPrecioTotal">
-                    <div class="col-3 align-self-center" style="margin-top: 8px;">
-                      <div class="form-group text-right">
+                </form>
+                <form class="col-12">
+                  <div class="row d-flex justify-content-end align-items-center" *ngIf="flagPrecioTotal">
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                      <div class="form-group text-right mb-1">
                         <label>Total S/.</label>
                       </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-9 col-sm-9 col-md-9 col-lg-3 col-xl-3">
                       <div class="form-group text-center">
                         <input type="text" class="form-control" name="precio_final" [(ngModel)]="precio_final" disabled />
                       </div>
@@ -102,33 +111,50 @@
                   </div>
                 </form>
 
-                <form class="col-12" style="margin-top: 10px;">
-                <div class="row" *ngIf="flagPrecioTotal">
-                  <div class="col-9"></div>
-                  <div class="col-1.5" style="margin-top: 8px;margin-right: 35px;margin-left: 7px;">
-                      <button type="button" class="btn btn-dark float-right" style="width: 140px;" (click)="updatePagina()">cancelar</button>
-                  </div>
-                  <div class="col-1.5" style="margin-top: 8px">
-                      <button type="button" class="btn btn-light float-right" style="width: 140px;" (click)="getToken(modalTeryCon)">Pagar ahora</button>
-                  </div>
-                </div>
-                </form>
-
-                <form class="col-12" style="margin-top: 10px;" *ngIf="flagPrecioTotal || flagRespuestaVisa">
-                <div class="row">
-                  <div class="col-2 align-self-left" style="margin-top: 8px;">
-                    <div class="form-group text-right">
-                      <label>Respuesta</label>
+                <form class="col-12">
+                  <div class="row justify-content-end" *ngIf="flagPrecioTotal">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 ">
+                      <div class="form-group text-center">
+                        <button type="button" class="btn btn-dark w-100" [disabled]="flagRespuestaVisa"  (click)="updatePagina()" >Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                      <div class="form-group text-center">
+                        <button type="button" class="btn btn-light w-100" [disabled]="flagRespuestaVisa"  (click)="getToken(modalTeryCon)">Pagar ahora</button>
+                    </div>
                     </div>
                   </div>
-                  <div class="col-7 align-self-center" style="margin-top: 8px;">
-                    <div class="form-group">
-                      <textarea name="data_visanet" cols="80" rows="5">
-                        {{response_pedido}} ---------------
-                        {{response_detalle}} ----------------
-                        {{response_visa}} -----------------
-                      </textarea>
+                </form>
+
+                <form class="col-12" style="margin-top: 10px;" *ngIf="flagRespuestaVisa">
+                <div class="row">
+                  <div class="col-12 align-self-left" >
+                    <div class="form-group text-left">
+                      <label>Respuesta:</label>
+                    </div>
+                  </div>
+                  <div class="col-12 align-self-center">
+                    <div class="form-group border" *ngIf="aceptado">
+                      <div>Número de Pedido: {{response_visa["order"]["purchaseNumber"]}}</div>
+                      <div>Descripción de Transacción: {{response_visa["dataMap"]["ECI_DESCRIPTION"]}}</div>
+                      <div>Numero de Tarjeta: {{response_visa["dataMap"]["CARD"]}}</div>
+                      <div>Marca: {{response_visa["dataMap"]["BRAND"]}}</div>
+                      <div>Monto: {{response_visa["dataMap"]["AMOUNT"]}}</div>
+                      <div>Tipo de Moneda: {{response_visa["order"]["currency"]}}</div>
+                      <div>Estatus: {{response_visa["dataMap"]["STATUS"]}}</div>
+                      <div>Estatus Descripción: {{response_visa["dataMap"]["ACTION_DESCRIPTION"]}}</div>
+                      <div>Código de Autorización: {{response_visa["dataMap"]["AUTHORIZATION_CODE"]}}</div>
                    </div>
+                   <div class="form-group border" *ngIf="!aceptado">
+                    <div>Error: {{response_visa["errorMessage"]}}</div>
+                    <div>Descripción de Transacción: {{response_visa["data"]["ECI_DESCRIPTION"]}}</div>
+                    <div>Numero de Tarjeta: {{response_visa["data"]["CARD"]}}</div>
+                    <div>Marca: {{response_visa["data"]["BRAND"]}}</div>
+                    <div>Monto: {{response_visa["data"]["AMOUNT"]}}</div>
+                    <div>Tipo de Moneda: PEN</div>
+                    <div>Estatus: {{response_visa["data"]["STATUS"]}}</div>
+                    <div>Estatus Descripción: {{response_visa["data"]["ACTION_DESCRIPTION"]}}</div>
+                 </div>
                   </div>
                 </div>
                 </form>
@@ -138,51 +164,48 @@
   
       <!-- Region Modal  -->
 
-      <ng-template #modalTeryCon>
+      <ng-template #modalTeryCon >
         
-        <div class="modal-header">
+        <div class="modal-header" style="background-color: #f2f2f2;">
             <h4 class="modal-title">
-                <img src="../assets/img/INDECOPI.jpg" alt="Indecopi" style="width: 100px;">
+                <img src="../assets/img/Indecopi_lay.png" alt="Indecopi" style="width: 100px;">
             </h4>
-            <button type="button" class="close" aria-label="Close" (click)="updatePedidoDetalle()">
-              <span aria-hidden="true">&times;</span>
-            </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="background-color: #f2f2f2;">
           <div class="row">
-            <h1>Terminos y condiciones</h1>
+            <h3>Terminos y condiciones</h3>
           </div>
           <div class="row">
             <p>{{data_terminos}}</p>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()">Cancelar</button>
-            <button type="button" class="btn btn-light" (click)="showModalDetalle(modaldetalle,modalTeryCon)">Aceptar</button>
+        <div class="modal-footer" style="background-color: #f2f2f2;">
+          <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()" style="background-color: #ffaa00; color: #843c0c;">Cancelar</button>
+            <button type="button" class="btn btn-light" (click)="showModalDetalle(modaldetalle,modalTeryCon)" style="background-color: #9e004f; ">Aceptar</button>
         </div>
 
     </ng-template>
 
     <ng-template #modaldetalle let-modal>
-      <div class="modal-header">
+      <div class="modal-header" style="background-color: #f2f2f2;">
         <div class="row container p-0">
-          <div class="col-3">
+          <div class="col-3 pl-0">
             <h4 class="modal-title">
-              <img src="../assets/img/INDECOPI.jpg" alt="Indecopi" style="width: 100px;">
+              <img src="../assets/img/Indecopi_lay.png" alt="Indecopi" style="width: 100px;">
             </h4>
           </div>
           <div class="col-9 pr-0 d-flex justify-content-end">
             <div class="row">
-              <div class="col-12 d-flex justify-content-end" style="height: 24px;">Fecha: {{data_cabecera[0][2]}}</div>
-              <div class="col-12 d-flex justify-content-end">Hora: {{hora_pedido_f}}</div>
+              <div class="col-12 d-flex justify-content-end pr-0" style="height: 24px;">Fecha: {{data_cabecera[0][2]}}</div>
+              <div class="col-12 d-flex justify-content-end pr-0">Hora: {{hora_pedido_f}}</div>
             </div>
           </div>
-          <div class="col-12 d-flex justify-content-start">
+          <div class="col-12 d-flex justify-content-start pl-0">
             <p style="font-weight: bold; margin-bottom: 0px; font-size: 22px;">Nro. de Pedido: {{data_cabecera[0][0]}}</p>
           </div>
         </div>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="background-color: #f2f2f2;">
         <div class="row">
           <div class="col-6 d-flex justify-content-start">Items/Concepto</div>
           <div class="col-2 d-flex justify-content-center">Cantidad</div>
@@ -208,18 +231,17 @@
           <!-- <p>Detalle2: {{data_dt[0]}}</p> -->
         </div> 
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" style="padding-top: 5px; padding-bottom: 5px; height: 41px; margin-bottom: 5px; width: 187px;" (click)="updatePedidoDetalle()">Cancelar</button>
+      <div class="modal-footer" style="background-color: #f2f2f2;">
+        <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()" style="background-color: #ffaa00;padding-top: 4px;padding-bottom: 4px;height: 40px;margin-bottom: 5px;width: 187px;">Cancelar</button>
         <div id="btn_pago">
-          <form method="POST" action="{{url_visa}}?num_pedido_res={{numero_pedido_f}}&usuario={{usuario_name}}&host=Diego" id="boton_pago" (click)="showloader()">
+          <form method="POST" action="{{url_visa}}?num_pedido_res={{numero_pedido_f}}&usuario={{usuario_name}}&host=Diego" id="boton_pago">
             </form>
         </div>
       </div>
   </ng-template>  
   
-  
+
     </div>
   </body>
-
   <!-- Spinner -->
 

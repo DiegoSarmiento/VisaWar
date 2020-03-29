@@ -5,12 +5,10 @@
     margin-top: 15px;
 }
 
-.modal-body{
-    height: 600px !important;
-    max-height: 600px !important;
+body{
+    font-family: Arial;
 }
 
-.light-blue-backdrop {
-    background-color: #5cb3fd; 
+.ClaseModal{
+    background-color: #f2f2f2;
 }
-
