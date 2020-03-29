@@ -172,35 +172,31 @@
             </h4>
         </div>
         <div class="modal-body" style="background-color: #f2f2f2;">
-          <div class="row">
             <h3>Terminos y condiciones</h3>
-          </div>
-          <div class="row">
             <p>{{data_terminos}}</p>
-            </div>
         </div>
         <div class="modal-footer" style="background-color: #f2f2f2;">
           <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()" style="background-color: #ffaa00; color: #843c0c;">Cancelar</button>
-            <button type="button" class="btn btn-light" (click)="showModalDetalle(modaldetalle,modalTeryCon)" style="background-color: #9e004f; ">Aceptar</button>
+            <button type="button" class="btn btn-light" (click)="showModalDetalle(modaldetalle,modalTeryCon)" style="background-color: #9e004f; color:#ffff; border-color: black;">Aceptar</button>
         </div>
 
     </ng-template>
 
     <ng-template #modaldetalle let-modal>
       <div class="modal-header" style="background-color: #f2f2f2;">
-        <div class="row container p-0">
-          <div class="col-3 pl-0">
+        <div class="row">
+          <div class="col-3">
             <h4 class="modal-title">
               <img src="../assets/img/Indecopi_lay.png" alt="Indecopi" style="width: 100px;">
             </h4>
           </div>
-          <div class="col-9 pr-0 d-flex justify-content-end">
+          <div class="col-9 d-flex justify-content-end">
             <div class="row">
-              <div class="col-12 d-flex justify-content-end pr-0" style="height: 24px;">Fecha: {{data_cabecera[0][2]}}</div>
-              <div class="col-12 d-flex justify-content-end pr-0">Hora: {{hora_pedido_f}}</div>
+              <div class="col-12 d-flex justify-content-end" style="height: 24px;">Fecha: {{data_cabecera[0][2]}}</div>
+              <div class="col-12 d-flex justify-content-end">Hora: {{hora_pedido_f}}</div>
             </div>
           </div>
-          <div class="col-12 d-flex justify-content-start pl-0">
+          <div class="col-12 d-flex justify-content-start">
             <p style="font-weight: bold; margin-bottom: 0px; font-size: 22px;">Nro. de Pedido: {{data_cabecera[0][0]}}</p>
           </div>
         </div>
@@ -232,7 +228,7 @@
         </div> 
       </div>
       <div class="modal-footer" style="background-color: #f2f2f2;">
-        <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()" style="background-color: #ffaa00;padding-top: 4px;padding-bottom: 4px;height: 40px;margin-bottom: 5px;width: 187px;">Cancelar</button>
+        <button type="button" class="btn btn-dark" (click)="updatePedidoDetalle()" style="background-color: #ffaa00;padding-top: 4px;padding-bottom: 4px;height: 40px;margin-bottom: 5px;width: 187px; color: #843c0c;">Cancelar</button>
         <div id="btn_pago">
           <form method="POST" action="{{url_visa}}?num_pedido_res={{numero_pedido_f}}&usuario={{usuario_name}}&host=Diego" id="boton_pago">
             </form>
