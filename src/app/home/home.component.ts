@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit {
   response_visa;
   btn_pagar:boolean = true;
   aceptado: boolean = true;
+  host: string;
 
   disa:boolean = false;
   ngOnInit() {
@@ -64,17 +65,20 @@ export class HomeComponent implements OnInit {
     if (num_pedido != "" && num_pedido != null) {
       await this.httpClient.get(Constants.DATA_LOCAL.obtenerResVisa+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_visa => {
         this.response_visa = res_data_visa;
+        console.log("res_data_visa",res_data_visa);
         await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_pedido => {
           this.response_pedido = res_data_pedido;
+          console.log("res_data_pedido",res_data_pedido);
           await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_detalle => {
             this.response_detalle = res_detalle;
+            console.log("res_detalle",res_detalle);
             if (this.response_visa.length == 0 ) {
               this.flagRespuestaVisa = false;
               this.anadirLista('','','','');
             }else{
               var tam_obj = Object.keys(res_detalle).length;
               for (let i = 0; i < tam_obj; i++) {
-                this.anadirLista(res_detalle[i][2],res_detalle[i][4],res_detalle[i][3],res_detalle[i][5]);
+                this.anadirLista(res_detalle[i][2],res_detalle[i][3],res_detalle[i][4],res_detalle[i][5]);
               }
               this.precio_final = this.response_pedido[0][1];
               this.flagPrecioTotal = true;
@@ -181,8 +185,9 @@ export class HomeComponent implements OnInit {
   calcular_total(item : FormControl){
     this.flagPrecioTotal = false;
     this.flagRespuestaVisa = false;
-    let cantidad = parseInt(item['cantidad'].value);
-    let precio = parseFloat(item['precio'].value);
+
+    let cantidad = item['cantidad'].value != "" ? parseInt(item['cantidad'].value) : 0;
+    let precio = item['precio'].value != "" ? parseFloat(item['precio'].value) : 0;
     let subtotalProd = cantidad * precio;
     item['total'].setValue(subtotalProd.toFixed(2));
   }
@@ -206,6 +211,7 @@ export class HomeComponent implements OnInit {
       this.precio_final = (this.precio_final + parseFloat(this.formularioVisa.controls[index].value['total']));
     };
     this.flagPrecioTotal = true;
+    await this.httpClient.get("http://api.ipify.org/?format=json").subscribe(async res_data => { this.host = await (res_data["ip"]).toString()});
   }
 
   cerrarModal(modal){
@@ -221,27 +227,26 @@ export class HomeComponent implements OnInit {
   //Region Http Spring Rest
   async insertPedido(modal){
     var usuario = localStorage.getItem('data_user');
-    let body = "precio_final="+this.precio_final.toString()+"&token="+this.token_data+"&usuario="+usuario+"&host=Diego";
-    await this.httpClient.post(Constants.DATA_LOCAL.insertPedido, body, {headers: this.getHeaders()}).subscribe(
-      async num_pedido_res => {
-        localStorage.setItem('numero_pedido', num_pedido_res.toString());
-        let data_lenght = this.formularioVisa.controls.length;
-        for (let i = 0; i < data_lenght; i++) {
-          let producto = this.formularioVisa.controls[i]['controls'].producto.value;
-          let precio = this.formularioVisa.controls[i]['controls'].precio.value;
-          let cantidad = this.formularioVisa.controls[i]['controls'].cantidad.value;
-          let total = this.formularioVisa.controls[i]['controls'].total.value;
-          let body = "num_pedido_res="+num_pedido_res+"&producto="+producto.toString()+"&precio="+precio.toString()+"&cantidad="+cantidad+"&total="+total.toString()+"&usuario="+usuario+"&host=Diego";
-          await this.httpClient.post(Constants.DATA_LOCAL.insertDetalle, body, {headers: this.getHeaders()}).subscribe(res_data => {
-            console.log("res_data",res_data);
-          });
-        }
-        await this.httpClient.get(Constants.DATA_LOCAL.terminosycondiciones, {headers: this.getHeadersText(), responseType: 'text'}).subscribe(async res_data => {
-          this.data_terminos = res_data.toString(); 
-          await this.abrirModal(modal);
+    let body = "precio_final="+this.precio_final.toString()+"&token="+this.token_data+"&usuario="+usuario+"&host="+this.host;
+    this.httpClient.post(Constants.DATA_LOCAL.insertPedido, body, { headers: this.getHeaders() }).subscribe(async (num_pedido_res) => {
+      localStorage.setItem('numero_pedido', num_pedido_res.toString());
+      let data_lenght = this.formularioVisa.controls.length;
+      for (let i = 0; i < data_lenght; i++) {
+        let producto = this.formularioVisa.controls[i]['controls'].producto.value;
+        let precio = this.formularioVisa.controls[i]['controls'].precio.value;
+        let cantidad = this.formularioVisa.controls[i]['controls'].cantidad.value;
+        let total = this.formularioVisa.controls[i]['controls'].total.value;
+        let body = "num_pedido_res=" + num_pedido_res + "&producto=" + producto.toString() + "&precio=" + precio.toString() + "&cantidad=" + cantidad + "&total=" + total.toString() + "&usuario=" + usuario + "&host="+this.host;
+        console.log(body);
+        await this.httpClient.post(Constants.DATA_LOCAL.insertDetalle, body, { headers: this.getHeaders() }).subscribe(res_data => {
+          console.log("res_data", res_data);
         });
       }
-    );
+      await this.httpClient.get(Constants.DATA_LOCAL.terminosycondiciones, { headers: this.getHeadersText(), responseType: 'text' }).subscribe(async (res_data) => {
+        this.data_terminos = res_data.toString();
+        await this.abrirModal(modal);
+      });
+    });
   }
 
   async showModalDetalle(modaldetalle,modalTeryCon){
