@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit {
   btn_pagar:boolean = true;
   aceptado: boolean = true;
   host: string;
+  email_response: string; 
 
   disa:boolean = false;
   ngOnInit() {
@@ -65,7 +66,16 @@ export class HomeComponent implements OnInit {
     if (num_pedido != "" && num_pedido != null) {
       await this.httpClient.get(Constants.DATA_LOCAL.obtenerResVisa+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_visa => {
         this.response_visa = res_data_visa;
-        console.log("res_data_visa",res_data_visa);
+        console.log("value_block_res",this.response_visa);
+        if ((this.response_visa).length > 0) {
+          let value_block = JSON.parse(res_data_visa[0][1].toString());
+          if (value_block.hasOwnProperty("dataMap")) {
+            if (value_block["dataMap"].hasOwnProperty("VAULT_BLOCK")) {
+              console.log("value_block",value_block);
+              localStorage.setItem("recordar_tarjeta", value_block["dataMap"]["VAULT_BLOCK"]);
+            }
+          }
+        }
         await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_pedido => {
           this.response_pedido = res_data_pedido;
           console.log("res_data_pedido",res_data_pedido);
@@ -134,6 +144,7 @@ export class HomeComponent implements OnInit {
 
    async generarBoton() {
     let precio_fixed =  this.precio_total_f.toFixed(2);
+    this.email_response = localStorage.getItem('recordar_tarjeta');
     let scriptEl = document.createElement('script');
     console.log('this.precio_final', this.precio_final);
     scriptEl.setAttribute('src', Constants.DATA_VISA.urlJs);
@@ -145,6 +156,9 @@ export class HomeComponent implements OnInit {
     scriptEl.setAttribute('data-merchantlogo', "https://www.indecopi.gob.pe/image/layout_set_logo?img_id=3224595&t=1585113168475");
     scriptEl.setAttribute('data-timeouturl', Constants.DATA_LOCAL.insertarDetalleVisa);
     scriptEl.setAttribute('data-formbuttoncolor', "#9e004f");
+    if (this.email_response != null) {
+      scriptEl.setAttribute('data-usertoken', this.email_response);
+    }
     console.log(scriptEl);
     document.getElementById("boton_pago").appendChild(scriptEl);
   }
