@@ -66,22 +66,18 @@ export class HomeComponent implements OnInit {
     if (num_pedido != "" && num_pedido != null) {
       await this.httpClient.get(Constants.DATA_LOCAL.obtenerResVisa+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_visa => {
         this.response_visa = res_data_visa;
-        console.log("value_block_res",this.response_visa);
         if ((this.response_visa).length > 0) {
           let value_block = JSON.parse(res_data_visa[0][1].toString());
           if (value_block.hasOwnProperty("dataMap")) {
             if (value_block["dataMap"].hasOwnProperty("VAULT_BLOCK")) {
-              console.log("value_block",value_block);
               localStorage.setItem("recordar_tarjeta", value_block["dataMap"]["VAULT_BLOCK"]);
             }
           }
         }
         await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data_pedido => {
           this.response_pedido = res_data_pedido;
-          console.log("res_data_pedido",res_data_pedido);
           await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedidoDetalle+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_detalle => {
             this.response_detalle = res_detalle;
-            console.log("res_detalle",res_detalle);
             if (this.response_visa.length == 0 ) {
               this.flagRespuestaVisa = false;
               this.anadirLista('','','','');
@@ -103,7 +99,6 @@ export class HomeComponent implements OnInit {
         });
       });
     }else{
-      console.log("this.flagRespuestaVisa",this.flagRespuestaVisa);
       this.anadirLista('','','','');
     }
   }
@@ -132,7 +127,6 @@ export class HomeComponent implements OnInit {
       await this.http.post(Constants.DATA_VISA.urlApiSesion + Constants.DATA_VISA.merchantid,JSON.stringify(body),{headers: headers}).subscribe(
         async data => {
           this.session_data = data['sessionKey'];
-          console.log('formularioVisa',this.formularioVisa);
           await this.insertPedido(modal);
           
         },
@@ -146,7 +140,6 @@ export class HomeComponent implements OnInit {
     let precio_fixed =  this.precio_total_f.toFixed(2);
     this.email_response = localStorage.getItem('recordar_tarjeta');
     let scriptEl = document.createElement('script');
-    console.log('this.precio_final', this.precio_final);
     scriptEl.setAttribute('src', Constants.DATA_VISA.urlJs);
     scriptEl.setAttribute('data-sessiontoken', this.session_data);
     scriptEl.setAttribute('data-merchantid', Constants.DATA_VISA.merchantid);
@@ -159,7 +152,6 @@ export class HomeComponent implements OnInit {
     if (this.email_response != null) {
       scriptEl.setAttribute('data-usertoken', this.email_response);
     }
-    console.log(scriptEl);
     document.getElementById("boton_pago").appendChild(scriptEl);
   }
 
@@ -176,7 +168,6 @@ export class HomeComponent implements OnInit {
 
   anadirLista(producto, precio, cantidad, total) {
     this.flagPrecioTotal = false;
-    console.log("producto, precio, cantidad, total",producto, precio, cantidad, total);
     if (producto != "" && precio!="" && cantidad!="" && total!="" ) {
       this.disa = true;
     }
@@ -188,7 +179,6 @@ export class HomeComponent implements OnInit {
         total: new FormControl({value: total,disabled: this.disa})
       });
       this.formularioVisa.push(trabajo);
-      console.log(this.formularioVisa.controls);
     }
   }
 
@@ -218,8 +208,6 @@ export class HomeComponent implements OnInit {
   async totalizar(){
     this.precio_final = 0;
     for (let index = 0; index < this.formularioVisa.controls.length ; index++) {
-      console.log("this.precio_final",this.precio_final );
-      console.log("this.precio_final2",parseFloat(this.formularioVisa.controls[index].value['total']));
       this.formularioVisa.controls[index].disable();
       this.btn_pagar = false;
       this.precio_final = (this.precio_final + parseFloat(this.formularioVisa.controls[index].value['total']));
@@ -251,9 +239,7 @@ export class HomeComponent implements OnInit {
         let cantidad = this.formularioVisa.controls[i]['controls'].cantidad.value;
         let total = this.formularioVisa.controls[i]['controls'].total.value;
         let body = "num_pedido_res=" + num_pedido_res + "&producto=" + producto.toString() + "&precio=" + precio.toString() + "&cantidad=" + cantidad + "&total=" + total.toString() + "&usuario=" + usuario + "&host="+this.host;
-        console.log(body);
         await this.httpClient.post(Constants.DATA_LOCAL.insertDetalle, body, { headers: this.getHeaders() }).subscribe(res_data => {
-          console.log("res_data", res_data);
         });
       }
       await this.httpClient.get(Constants.DATA_LOCAL.terminosycondiciones, { headers: this.getHeadersText(), responseType: 'text' }).subscribe(async (res_data) => {
@@ -266,10 +252,8 @@ export class HomeComponent implements OnInit {
   async showModalDetalle(modaldetalle,modalTeryCon){
     await this.cerrarModal(modalTeryCon);
     let num_pedido = await localStorage.getItem('numero_pedido');
-    console.log('num_pedido',num_pedido);
     await this.httpClient.get(Constants.DATA_LOCAL.obtenerPedido+"?num_pedido_res="+num_pedido, {headers: this.getHeaders()}).subscribe(async res_data => {
       this.data_cabecera = res_data;
-      console.log("rest_",res_data);
       this.hora_pedido_f = moment(this.data_cabecera[0][2]).format('HH:mm:ss');
       this.data_cabecera[0][2] = moment(this.data_cabecera[0][2]).format('DD/MM/YYYY');
       this.numero_pedido_f = this.data_cabecera[0][0];

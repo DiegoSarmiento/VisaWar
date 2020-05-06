@@ -20,7 +20,7 @@ export class LoginComponent {
   async inicia_sesion(){
     let body = "usuario="+this.user+"&password="+this.pass;
     await this.httpClient.post(Constants.DATA_LOCAL.loginUsuario, body, {headers: this.getHeaders()}).subscribe(async res_data => {
-      if (res_data == 1) {
+      if (res_data != "0") {
         await localStorage.setItem('data_user',this.user);
         await this.router.navigate(['']);
       }else{
