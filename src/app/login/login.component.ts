@@ -17,6 +17,11 @@ export class LoginComponent {
   constructor(private router: Router,
               private httpClient: HttpClient,) { }
 
+  private getHeaders(): HttpHeaders {
+    let header = new HttpHeaders();
+    header = header.append('Content-Type', 'application/x-www-form-urlencoded');
+    return header;
+  }
   async inicia_sesion(){
     let body = "usuario="+this.user+"&password="+this.pass;
     await this.httpClient.post(Constants.DATA_LOCAL.loginUsuario, body, {headers: this.getHeaders(), responseType: 'text'}).subscribe(async res_data => {
@@ -31,11 +36,7 @@ export class LoginComponent {
 
   }
 
-  private getHeaders(): HttpHeaders {
-    let header = new HttpHeaders();
-    header = header.append('Content-Type', 'text/plain');
-    return header;
-  }
+
 
   //#region ALERT
   cerrar_alert(){
