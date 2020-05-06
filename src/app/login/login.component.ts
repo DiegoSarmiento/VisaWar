@@ -19,7 +19,8 @@ export class LoginComponent {
 
   async inicia_sesion(){
     let body = "usuario="+this.user+"&password="+this.pass;
-    await this.httpClient.post(Constants.DATA_LOCAL.loginUsuario, body, {headers: this.getHeaders()}).subscribe(async res_data => {
+    await this.httpClient.post(Constants.DATA_LOCAL.loginUsuario, body, {headers: this.getHeaders(), responseType: 'text'}).subscribe(async res_data => {
+      console.log('res_data',res_data);
       if (res_data != "0") {
         await localStorage.setItem('data_user',this.user);
         await this.router.navigate(['']);
@@ -32,7 +33,7 @@ export class LoginComponent {
 
   private getHeaders(): HttpHeaders {
     let header = new HttpHeaders();
-    header = header.append('Content-Type', 'application/x-www-form-urlencoded');
+    header = header.append('Content-Type', 'text/plain');
     return header;
   }
 
