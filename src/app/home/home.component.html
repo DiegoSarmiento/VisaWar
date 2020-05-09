@@ -57,17 +57,17 @@
                       </div>
                       <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <input type="number" min="1" class="form-control" [formControl]="items.controls.cantidad" placeholder="Cantidad" (change)="calcular_total(items.controls)" [disabled]="!btn_pagar"/>
+                          <input type="number"  min="1" class="form-control" [formControl]="items.controls.cantidad" placeholder="Cantidad" (change)="calcular_total(items.controls)" [disabled]="!btn_pagar"/>
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <input type="text" min="1" class="form-control" [formControl]="items.controls.precio" placeholder="Precio" (change)="calcular_total(items.controls)" [disabled]="!btn_pagar"/>
+                          <input type="text" style="text-align: right;" min="1" class="form-control" [formControl]="items.controls.precio" placeholder="Precio" (change)="calcular_total(items.controls)" [disabled]="!btn_pagar"/>
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <div class="form-group">
-                          <input type="text" class="form-control" [formControl]="items.controls.total" placeholder="Total" disabled/>
+                          <input type="text" style="text-align: right;" class="form-control" [formControl]="items.controls.total" placeholder="Total" disabled/>
                         </div>
                       </div>
                       <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
