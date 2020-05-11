@@ -1,30 +1,28 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { AplicacionComponent } from 'src/core/views/aplicacion/aplicacion.component';
-import { ConfiguracionComponent } from 'src/core/views/configuracion/configuracion.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { HeaderComponent } from 'src/core/views/header/header.component';
 import { AplicacionModule } from 'src/core/views/aplicacion/aplicacion.module';
 import { ConfiguracionModule } from 'src/core/views/configuracion/configuracion.module';
-import { FormatofechaPipe } from 'src/pipe/formatofecha.pipe';
+import { HeaderModule } from 'src/core/views/header/header.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AplicacionModule,
-    ConfiguracionModule
+    ConfiguracionModule,
+    HeaderModule
   ],
   providers: [{    
     provide: LocationStrategy, 
     useClass: HashLocationStrategy}],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule { }
