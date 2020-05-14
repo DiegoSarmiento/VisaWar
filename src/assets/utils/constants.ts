@@ -24,4 +24,9 @@ export class Constants {
         terminosycondiciones: environment.url + '/visanet/obtenerterycon',
         obtenerResVisa: environment.url + '/visanet/obtenerResVisa'
     }
+
+    public static DATA_EXTERNA = {
+        codigoApp: "XC001",
+        url: environment.url_limpio + '/administracion/obteneraplicativo',
+    }
 }

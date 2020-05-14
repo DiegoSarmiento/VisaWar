@@ -116,7 +116,7 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                       <div class="form-group text-center">
-                        <button type="button" class="btn btn-light w-100" [disabled]="flagRespuestaVisa"  (click)="getToken(modalTeryCon)">Pagar ahora</button>
+                        <button type="button" class="btn btn-light w-100" [disabled]="flagRespuestaVisa"  (click)="getToken(modalTeryCon,modalresult)">Pagar ahora</button>
                     </div>
                     </div>
                   </div>
@@ -232,6 +232,19 @@
       </div>
   </ng-template>  
   
+  <ng-template #modalresult>
+      <div class="modal-header" style="background-color: #f2f2f2;">
+        <h4 class="modal-title">
+            <img src="../assets/img/Indecopi_lay.png" alt="Indecopi" style="width: 100px;">
+        </h4>
+    </div>
+    <div class="modal-body" style="background-color: #f2f2f2;">
+        <h5>Esta App no se encuentra Permitida</h5>
+    </div>
+    <div class="modal-footer" style="background-color: #f2f2f2;">
+        <button type="button" class="btn btn-light" (click)="cerrarModal(modalresult)" style="background-color: #9e004f; color:#ffff; border-color: black;">Aceptar</button>
+    </div>
+  </ng-template>
 
     </div>
   </body>

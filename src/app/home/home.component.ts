@@ -103,14 +103,22 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async getToken(modal){
-  let headers = new HttpHeaders();
-  headers = headers.append('Authorization', 'Basic aW50ZWdyYWNpb25lcy52aXNhbmV0QG5lY29tcGx1cy5jb206ZDVlN25rJE0=');
-  headers = headers.append('Accept', `*/*`);
-  this.http.post(Constants.DATA_VISA.urlApiSeguridad, null, { headers: headers, responseType: 'text' }).subscribe(async data => {
-      this.token_data = data;
-      await this.getSession(data,modal);
-    }, error => console.log('Error2', error));
+  async getToken(modal,modalresult){
+  let bodynum = "PIN_VC_CODAPP="+Constants.DATA_EXTERNA.codigoApp;
+  this.http.post(Constants.DATA_EXTERNA.url, bodynum, { headers: this.getHeaders() }).subscribe(async data2 => {
+    console.log("Data",data2);
+    if ((data2[0][2]).toUpperCase()  == "SI") {
+      let headers = new HttpHeaders();
+      headers = headers.append('Authorization', 'Basic aW50ZWdyYWNpb25lcy52aXNhbmV0QG5lY29tcGx1cy5jb206ZDVlN25rJE0=');
+      headers = headers.append('Accept', `*/*`);
+      this.http.post(Constants.DATA_VISA.urlApiSeguridad, null, { headers: headers, responseType: 'text' }).subscribe(async data => {
+          this.token_data = data;
+          await this.getSession(data,modal);
+        }, error => console.log('Error2', error));
+    }else{
+      this.abrirModal(modalresult);
+    }
+  }, error => console.log('Error2', error));
   }
 
   async getSession(token,modal){
