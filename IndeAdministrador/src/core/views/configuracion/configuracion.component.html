@@ -2,7 +2,7 @@
     <table class="table border">
         <thead style="background-color: #A8A6A6">
           <tr>
-            <th scope="col">Aplicaciones</th>
+            <th scope="col">Configuraciones</th>
             <th scope="col" colspan="6"></th>
           </tr>
         </thead>
@@ -26,10 +26,102 @@
             <tr>
               <td colspan="7">
                 <div class="row justify-content-end">
-                    <button type="button" class="btn btn-secondary pl-3 pr-3 mr-2">Editar</button>
+                    <button type="button" class="btn btn-secondary pl-3 pr-3 mr-2" (click)="abrirModalConfiguracion(modalTerminos, modalEmail)">Editar</button>
                 </div>
               </td>
             </tr>
         </tfoot>
     </table>
 </div>
+
+
+<ng-template #modalTerminos >
+        
+  <!--Si no hay seleccion-->
+      <div class="modal-header" style="background-color: #f2f2f2;">
+        <h4 class="modal-title">
+          Terminos y condiciones
+        </h4>
+      </div>
+      <div class="modal-body" style="background-color: #f2f2f2;">
+          <form>
+            <div class="form-group">
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" [(ngModel)]="dataTerminos" name="dataTerminos"></textarea>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary pl-3 pr-3 mr-2" (click)="modificarTerminos(modalDesactivar)">Aceptar</button>
+          <button type="button" class="btn btn-secondary pl-3 pr-3 mr-2" (click)="cerrarModalConfiguracion(modalTerminos)">Cancelar</button>
+      </div>
+      
+
+  </ng-template>
+
+  <ng-template #modalEmail >
+        
+    <!--Si no hay seleccion-->
+        <div class="modal-header" style="background-color: #f2f2f2;">
+          <h4 class="modal-title">
+            Correo de Notificación
+          </h4>
+        </div>
+        <div class="modal-body" style="background-color: #f2f2f2;">
+          <div class="row">
+            <div class="col-6">
+              <form>
+                <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Cuerpo de Mensaje(HTML)</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="7" [(ngModel)]="dataMail.html" name="html"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-4">
+                    Asunto: 
+                  </div>
+                  <div class="col-8">
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Asunto" [(ngModel)]="dataMail.asunto" name="asunto">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-4">
+                    Servidor SMTP: 
+                  </div>
+                  <div class="col-8">
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Servidor SMTP" [(ngModel)]="dataMail.servidor" name="servidor">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-4">
+                    Puerto: 
+                  </div>
+                  <div class="col-8">
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Puerto" [(ngModel)]="dataMail.puerto" name="puerto">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-4">
+                    Remitente: 
+                  </div>
+                  <div class="col-8">
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Remitente" [(ngModel)]="dataMail.remitente" name="remitente">
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary pl-3 pr-3 mr-2" (click)="modificarEmail(modalDesactivar)">Aceptar</button>
+          <button type="button" class="btn btn-secondary pl-3 pr-3 mr-2" (click)="cerrarModal(modalEmail)">Cancelar</button>
+        </div>  
+  </ng-template>

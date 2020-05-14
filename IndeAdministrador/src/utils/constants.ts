@@ -11,5 +11,7 @@ export class Constants {
 
     public static SERVICIOS_CONFIGURACION = {
         obtenerconfiguraciones: environment.url +'/administracion/obtenerconfiguraciones',
+        modificarterminos: environment.url +'/administracion/modificarterminos',
+        modificarcorreo: environment.url +'/administracion/modificarcorreo'
     }
 }
