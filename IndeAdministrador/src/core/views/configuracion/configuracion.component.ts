@@ -22,7 +22,7 @@ export class ConfiguracionComponent implements OnInit {
 
   listaConfiguraciones;
   filaSeleccionada;
-  seleccionadaConfiguracion ;
+  seleccionadaConfiguracion;
   dataTerminos;
   host;
 
