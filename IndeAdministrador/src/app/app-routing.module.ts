@@ -6,7 +6,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: 'configuracion', component: ConfiguracionComponent},
-  { path: '', component: AplicacionComponent}
+  { path: 'aplicacion', component: AplicacionComponent}
 ];
 
 @NgModule({

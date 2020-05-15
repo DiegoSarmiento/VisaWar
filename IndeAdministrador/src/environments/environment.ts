@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //"url": "http://localhost:8080",
-  'url': "http://159.89.121.195:8080/AppTodosPasarelaMultimarcaApi"
+  "url": "http://localhost:8080",
+  //'url': "http://159.89.121.195:8080/AppTodosPasarelaMultimarcaApi"
 };
 
 /*

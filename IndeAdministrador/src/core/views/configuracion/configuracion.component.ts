@@ -54,14 +54,24 @@ export class ConfiguracionComponent implements OnInit {
     return header;
   };
 
-  abrirModalConfiguracion(modalTerminos,modalEmail){
+  async abrirModalConfiguracion(modalTerminos,modalEmail){
     if (this.seleccionadaConfiguracion === undefined) {
       return null;
     }else{
       if (this.seleccionadaConfiguracion[0] == "XD001" && this.seleccionadaConfiguracion[0] !== undefined) {
-        this.abrirModal(modalTerminos);
+        await this.httpClient.get(Constants.SERVICIOS_CONFIGURACION.obtenerterminos, {headers: this.getHeaders()}).subscribe(async res_detalle => {
+          this.dataTerminos = res_detalle[0];
+          this.abrirModal(modalTerminos);
+        });
       } else if(this.seleccionadaConfiguracion[0] == "XD002" && this.seleccionadaConfiguracion[0] !== undefined){
-        this.abrirModal(modalEmail);
+        await this.httpClient.get(Constants.SERVICIOS_CONFIGURACION.obtenercorreo, {headers: this.getHeaders()}).subscribe(async res_detalle => {
+          this.dataMail.html =  res_detalle[0][1];
+          this.dataMail.asunto =  res_detalle[0][2];
+          this.dataMail.servidor =  res_detalle[0][3];
+          this.dataMail.puerto =  res_detalle[0][4];
+          this.dataMail.remitente =  res_detalle[0][5];
+          this.abrirModal(modalEmail);
+        });
       }
     }
   };
