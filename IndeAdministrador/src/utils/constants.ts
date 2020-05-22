@@ -16,4 +16,8 @@ export class Constants {
         obtenercorreo: environment.url +'/administracion/obtenercorreo',
         obtenerterminos: environment.url +'/administracion/obtenerterminos',
     }
+
+    public static SERVICIOS_EXTERNOS = {
+        obtenerip : 'http://api.ipify.org/?format=json',
+    }
 }

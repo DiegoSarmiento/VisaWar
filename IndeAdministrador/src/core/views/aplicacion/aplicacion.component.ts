@@ -44,7 +44,7 @@ export class AplicacionComponent implements OnInit {
   }
 
   async obtenerIp(){
-    await this.httpClient.get("http://api.ipify.org/?format=json").subscribe(async res_data => { this.host = await (res_data["ip"]).toString()});
+    await this.httpClient.get(Constants.SERVICIOS_EXTERNOS.obtenerip).subscribe(async res_data => { this.host = await (res_data["ip"]).toString()});
   }
   
   seleccionarAplicacion(aplicacion: object, indexfila: number){
