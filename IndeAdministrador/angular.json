@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/AppTodosPasarelaMultimarca",
+            "outputPath": "dist/appAdminPasarelaMultimarca",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -28,8 +28,8 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "baseHref": "/AppTodosPasarelaMultimarca/",
-            "deployUrl": "/AppTodosPasarelaMultimarca/"
+            "baseHref": "/appAdminPasarelaMultimarca/",
+            "deployUrl": "/appAdminPasarelaMultimarca/"
           },
           "configurations": {
             "production": {

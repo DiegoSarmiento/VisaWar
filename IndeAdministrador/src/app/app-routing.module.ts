@@ -5,8 +5,8 @@ import { AplicacionComponent } from 'src/core/views/aplicacion/aplicacion.compon
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'configuracion', component: ConfiguracionComponent},
-  { path: 'aplicacion', component: AplicacionComponent}
+  { path: 'configuracion/:usuario', component: ConfiguracionComponent},
+  { path: 'aplicacion/:usuario', component: AplicacionComponent}
 ];
 
 @NgModule({

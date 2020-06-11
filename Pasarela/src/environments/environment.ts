@@ -5,8 +5,11 @@
 export const environment = {
   production: false,
   //"url": "http://localhost:8080",
-  'url': "http://159.89.121.195:8080/appPasarelaMultimarcaAPI",
-  'url_limpio': "http://159.89.121.195:8080/AppTodosPasarelaMultimarcaApi"
+  //'url': "http://159.89.121.195:8080/appPasarelaMultimarcaAPI",
+  'url_limpio': "http://159.89.121.195:8080/AppTodosPasarelaMultimarcaApi",
+  'url': "http://192.168.99.1:7001/appTodosPasarelaMultimarcaApi",
+  //'url_limpio': "http://192.168.99.1:7001/appAdminPasarelaMultimarcaAPI",
+
 };
 
 /*

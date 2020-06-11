@@ -33,6 +33,6 @@ export class Constants {
     public static DATA_EXTERNA = {
         codigoApp: "XC001",
         url: environment.url_limpio + '/administracion/obteneraplicativo',
-        obtenerip : 'http://api.ipify.org/?format=json',
+        obtenerip  : 'http://api.ipify.org/?format=json',
     }
 }
