@@ -1,0 +1,124 @@
+<!-- 
+  - Author      : Pago Efectivo
+  - Email       :  
+  - Date        : 20/03/2020
+  - Description : Parte de negocio de la página configura.jsp
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>Notificación CIP</title>
+<link href="img/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" href="css/generico.css" media="none" onload="if(media!='all')media='all'">
+</head>
+<body>
+
+	<!--página inicio-->
+	<div class="pagina">
+
+		<div class="barraTitulo">
+			<!--barraTítulo inicio-->
+			<div class="alineado margenIzquierdo10 margenSuperior10">
+				<img src="img/logoPagoEfectivo.png" />
+			</div>
+			<div class="lineaSeparadoraVertical alineado margenIzquierdo20"></div>
+			<div class="titulo alineado">Notificación CIP</div>
+		</div>
+		<!--barraTítulo fin-->
+
+		<div class="barraMenu">
+			<!--barraMenu inicio-->
+
+			<div class="itemMenu margenIzquierdo5 margenSuperior20">CÓDIGO DE PAGO</div>
+
+			<div class="itemMenu">
+				<img src="img/vinetaCruz.png"
+					class="vinetaItemMenu alineado margenIzquierdo10 margenSuperior5" />
+				<div class="alineado margenIzquierdo5 margenSuperior5">
+					<a href="genera">Generar CIP</a>
+				</div>
+			</div>
+
+			<div class="itemMenu itemMenuSeleccionado">
+				<img src="img/vinetaSiguiente.png"
+					class="vinetaItemMenu alineado margenIzquierdo10 margenSuperior5" />
+				<div class="alineado margenIzquierdo5 margenSuperior5">Notificación CIP</div>
+			</div>
+
+			<div class="itemMenuPie">
+				<img src="img/vinetaAyuda.png"
+					class="vinetaItemMenuPie alineado margenIzquierdo10 margenSuperior5" />
+				<div class=" alineado margenIzquierdo5 margenSuperior5">
+					<a href="https://centraldeayuda.pagoefectivo.pe/hc/es">Ayuda</a>
+				</div>
+			</div>
+
+			<div class="itemMenuPie ">
+				<img src="img/vinetaConfiguracion.png"
+					class="vinetaItemMenuPie alineado margenIzquierdo10 margenSuperior5" />
+				<div class="alineado margenIzquierdo5 margenSuperior5">
+					<a href="configura">Configuración</a>
+				</div>
+			</div>
+
+			<div class="siguienteLinea lineaMenu"></div>
+
+			<div class="alineado">
+				<img src="img/vinetaAtras.png"
+					class="vinetaInferiorDerechaMenuPie alineado" />
+			</div>
+
+		</div>
+		<!--barraMenu fin-->
+
+		<div class="cuerpo">
+			<!--cuerpo inicio-->
+
+			<div th:if="${accionMensajeCorrecto != null}" th:text="${accionMensajeCorrecto}" class="mensajeCorrecto" id="accionMensajeCorrecto"></div>
+			<div th:if="${accionMensajeIncorrecto != null}" th:text="${accionMensajeIncorrecto}" class="mensajeIncorrecto" id="accionMensajeIncorrecto"></div>
+			<form action="notifica" method="post"
+				id="notificaFormulario" name="notificaFormulario">
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">PE-Signature (*)</div>
+					<input id="PE-Signature" name="PE-Signature" th:value="${PESignatureRecibido}"
+						type="text" class="cajaTexto ancho500" placeholder="Data" />
+					<div id="PE-SignatureMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">Request Body (*)</div>
+					<textarea id="requestBody" name="requestBody" type="text"
+						class="cajaTexto ancho500 alto150" placeholder="Data" th:text="${requestBody}"></textarea>
+					<div id="requestBodyMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea">
+					<div class="alineado margenIzquierdo40 ">
+						<button id="btnLimpiar" name="btnLimpiar" type="button"
+							class="botonSecundario ancho150 margenSuperior30">Limpiar</button>
+					</div>
+
+					<div class="alineado margenIzquierdo150 ">
+						<button id="btnValidar" name="btnValidar" type="button"
+							class="botonPrincipal ancho150 margenSuperior30">Validar</button>
+					</div>
+
+				</div>
+
+			</form>
+
+		</div>
+		<!--cuerpo fin-->
+
+	</div>
+	<!--página fin-->
+
+	<script async type="text/javascript" src="jsc/notifica.js"></script>
+
+</body>
+</html>

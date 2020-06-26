@@ -1,0 +1,2 @@
+PE-Signature = "119d0ba7ab34c599529a455d916276e9df17df71b4c09f5316c30e2ea9dccef9"
+requestBody = "{"eventType":"cip.paid","operationNumber":"12345","data":{"cip":2554557,"currency":"USD","amount":120.25}}"

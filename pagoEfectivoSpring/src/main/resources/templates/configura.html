@@ -1,0 +1,206 @@
+<!-- 
+  - Author      : Pago Efectivo
+  - Email       :  
+  - Date        : 20/03/2020
+  - Description : Parte de negocio de la página configura.jsp
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<link href="img/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<title>Configuración: Pasarela de PagoEfectivo</title>
+<link rel="stylesheet" href="css/generico.css" media="none" onload="if(media!='all')media='all'"></head>
+<body>
+
+	<div class="pagina">
+		<!--página inicio-->
+
+		<div class="barraTitulo">
+			<!--barraTítulo inicio-->
+			<div class="alineado margenIzquierdo10 margenSuperior10">
+				<img src="img/logoPagoEfectivo.png" />
+			</div>
+			<div class="lineaSeparadoraVertical alineado margenIzquierdo20"></div>
+			<div class="titulo alineado">Configuración: "Pasarela de PagoEfectivo"</div>
+		</div>
+		<!--barraTítulo fin-->
+
+		<div class="barraMenu">
+			<!--barraMenu inicio-->
+
+			<div class="itemMenu margenIzquierdo5 margenSuperior20">CÓDIGO DE PAGO</div>
+			<div class="itemMenu">
+				<img src="img/vinetaCruz.png"
+					class="vinetaItemMenu alineado margenIzquierdo10 margenSuperior5" />
+				<div class="alineado margenIzquierdo5 margenSuperior5">
+					<a href="genera">Generar CIP</a>
+				</div>
+			</div>
+
+			<div class="itemMenu">
+				<img src="img/vinetaSiguiente.png"
+					class="vinetaItemMenu alineado margenIzquierdo10 margenSuperior5" />
+				<div class="alineado margenIzquierdo5 margenSuperior5">
+					<a href="notifica">Notificación CIP</a>
+				</div>
+			</div>
+
+			<div class="itemMenuPie">
+				<img src="img/vinetaAyuda.png"
+					class="vinetaItemMenuPie alineado margenIzquierdo10 margenSuperior5" />
+				<div class=" alineado margenIzquierdo5 margenSuperior5">
+					<a href="https://centraldeayuda.pagoefectivo.pe/hc/es">Ayuda</a>
+				</div>
+			</div>
+
+			<div class="itemMenuPie itemMenuSeleccionado">
+				<img src="img/vinetaConfiguracion.png"
+					class="vinetaItemMenuPie alineado margenIzquierdo10 margenSuperior5" />
+				<div class="alineado margenIzquierdo5 margenSuperior5">Configuración</div>
+			</div>
+
+			<div class="siguienteLinea lineaMenu"></div>
+			<div class="alineado">
+				<img src="img/vinetaAtras.png"
+					class="vinetaInferiorDerechaMenuPie alineado" />
+			</div>
+
+		</div>
+		<!--barraMenu fin-->
+
+		<div class="cuerpo">
+			<!--cuerpo inicio-->
+
+			<div th:if="${accionMensajeCorrecto != null}" th:text="${accionMensajeCorrecto}" class="mensajeCorrecto" id="accionMensajeCorrecto"></div>
+			<div th:if="${accionMensajeIncorrecto != null}" th:text="${accionMensajeIncorrecto}" class="mensajeIncorrecto" id="accionMensajeIncorrecto"></div>
+			<form action="configura" method="post"
+				name="configuraFormulario" id="configuraFormulario"
+				autocomplete="off">
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">Servidor PagoEfectivo (*)</div>
+					<input th:value="${configuracion.ServidorPagoEfectivo}" name="ServidorPagoEfectivo" id="ServidorPagoEfectivo"
+						   type="text" class="cajaTexto ancho500"
+						   placeholder="Url del servidor de PagoEfectivo (Testing/ Producción)"
+						   required />
+					<div id="ServidorPagoEfectivoMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">AccessKey (*)</div>
+					<input name="AccessKey" id="AccessKey" th:value="${configuracion.AccessKey}"
+						   type="text" class="cajaTexto ancho500" placeholder="AccessKey del servidor de PagoEfectivo (Testing/ Producción)" required />
+					<div id="AccessKeyMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">SecretKey (*)</div>
+					<input name="SecretKey" id="SecretKey" type="text" class="cajaTexto ancho500" th:value="${configuracion.SecretKey}"
+						   placeholder="SecretKey del servidor de PagoEfectivo (Testing/ Producción)" required />
+					<div id="SecretKeyMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<hr class="lineaSeparadoraHorizontal" />
+				<br />
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">ID del Comercio (*)</div>
+					<input name="IDComercio" id="IDComercio" th:value="${configuracion.IDComercio}"
+						type="text" class="cajaTexto ancho500" placeholder="Ingresa tu ID" required />
+					<div id="IDComercioMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">Nombre del Comercio (*)</div>
+					<input name="NombreComercio" id="NombreComercio" th:value="${configuracion.NombreComercio}"
+						type="text" class="cajaTexto ancho500" placeholder="Nombre del comercio para el concepto de pago" required />
+					<div id="NombreComercioMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">Email del Comercio (*)</div>
+					<input name="EmailComercio" id="EmailComercio" th:value="${configuracion.EmailComercio}"
+						   type="text" class="cajaTexto ancho500" placeholder="Email del comercio para envío de comunicaciones" required />
+					<div id="EmailComercioMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<hr class="lineaSeparadoraHorizontal" />
+				<br />
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">Modo de Integración (*)</div>
+					<select name="ModoIntegracion" id="ModoIntegracion" class="combo ancho500" th:field="${configuracion.ModoIntegracion}" required>
+						<option value="" disabled selected hidden>Selecciona la modalidad de integración</option>
+						<option value="IFR">Iframe</option>
+						<option value="RED">Redirect</option>
+					</select>
+					<div id="ModoIntegracionMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">Tiempo de expiración del Pago (*)</div>
+					<div class="alineado ">
+						<input name="TiempoExpiracionPago" id="TiempoExpiracionPago" th:value="${configuracion.TiempoExpiracionPago}"
+							class="cajaTexto ancho300" placeholder="000" type="text" maxlength="3" required onkeypress="return verificarValorEntero(event,this)" />
+						<div class="mensajePlaceholder">Horas</div>
+						<div id="TiempoExpiracionPagoMensaje"
+							class="mensajeRequeridoAlterno"></div>
+					</div>
+				</div>
+
+				<div class="siguienteLinea margenInferior5">
+					<div class="etiqueta">País (*)</div>
+					<select name="Pais" id="Pais" class="combo ancho500" th:field="${configuracion.Pais}" required>
+						<option value="" disabled selected hidden>País del servicio</option>
+						<option value="PER">Perú</option>
+						<option value="ECU">Ecuador</option>
+					</select>
+					<div id="PaisMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="alineado margenInferior5">
+					<div class="etiqueta">Tipo de moneda (*)</div>
+					<select name="TipoMoneda" id="TipoMoneda" class="combo ancho200" th:field="${configuracion.TipoMoneda}" required>
+						<option value="" disabled selected hidden>Moneda de recaudación</option>
+						<option value="PEN">Soles ( S/ )</option>
+						<option value="USD">Dólares ( $ )</option>
+					</select>
+					<div id="TipoMonedaMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="alineado margenIzquierdo100 margenInferior5">
+					<div class="etiqueta">Monto (*)</div>
+					<input name="Monto" id="Monto" th:value="${configuracion.Monto}"
+						type="text" class="cajaTexto ancho200" placeholder="" required onkeypress="return verificarValorDecimal(event,this)" />
+					<div id="MontoMensaje" class="mensajeRequerido"></div>
+				</div>
+
+				<div class="siguienteLinea">
+
+					<div class="alineado margenIzquierdo40 ">
+						<button id="btnCancelar" name="btnCancelar" type="button"
+							class="botonSecundario ancho150 margenSuperior30">Limpiar</button>
+					</div>
+
+					<div class="alineado margenIzquierdo150 ">
+						<button id="btnGuardar" name="btnGuardar" type="button"
+							class="botonPrincipal ancho150 margenSuperior30">Guardar</button>
+					</div>
+
+				</div>
+
+			</form>
+		</div>
+		<!--cuerpo fin-->
+
+	</div>
+	<!--página fin-->
+
+	<script async type="text/javascript" src="jsc/configura.js"></script>
+
+</body>
+</html>

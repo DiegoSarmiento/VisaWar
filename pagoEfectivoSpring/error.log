@@ -1,0 +1,1 @@
+org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request: [{"code":111,"message":"Solicitud con datos inválidos.","data":[{"code":113,"message":"Valor invalido.","field":"accessKey"}]}]

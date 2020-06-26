@@ -1,0 +1,2 @@
+Error: Thu Jun 25 10:47:37 COT 2020org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request: [{"code":111,"message":"Solicitud con datos inválidos.","data":[{"code":113,"message":"Valor invalido.","field":"accessKey"}]}]
+Error: Thu Jun 25 10:49:11 COT 2020org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request: [{"code":111,"message":"Solicitud con datos inválidos.","data":[{"code":113,"message":"Valor invalido.","field":"accessKey"}]}]
