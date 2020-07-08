@@ -12,6 +12,7 @@ public class FilesUtil {
 	public boolean GuardarArchivo(String nombreArchivo, String contenido) throws IOException {
 		boolean fileCreated = false;
 		File strFile = null;
+		Writer objWriter = null;
 		try {
 
 			strFile = new File(nombreArchivo);
@@ -24,7 +25,7 @@ public class FilesUtil {
 			fileCreated = strFile.createNewFile();
 
 			// Escribir Archivo
-			Writer objWriter = new BufferedWriter(new FileWriter(strFile, false));
+			objWriter = new BufferedWriter(new FileWriter(strFile, false));
 			objWriter.write(contenido);
 			objWriter.flush();
 			objWriter.close();
@@ -32,6 +33,8 @@ public class FilesUtil {
 		} catch (Exception e) {
 			System.err.println(e);
 			fileCreated = false;
+		} finally {
+			objWriter.close();
 		}
 		return fileCreated;
 	}
@@ -40,6 +43,7 @@ public class FilesUtil {
 	public boolean SobreescribirArchivo(String nombreArchivo, String contenido) throws IOException {
 		boolean fileCreated = false;
 		File strFile = null;
+		Writer objWriter = null;
 		try {
 
 			strFile = new File(nombreArchivo);
@@ -49,7 +53,7 @@ public class FilesUtil {
 			}
 
 			// Escribir Archivo
-			Writer objWriter = new BufferedWriter(new FileWriter(strFile.getAbsoluteFile(), true));
+			objWriter = new BufferedWriter(new FileWriter(strFile.getAbsoluteFile(), true));
 			objWriter.write(contenido);
 			objWriter.flush();
 			objWriter.close();
@@ -57,6 +61,8 @@ public class FilesUtil {
 		} catch (Exception e) {
 			System.err.println(e);
 			fileCreated = false;
+		} finally {
+			objWriter.close();
 		}
 		return fileCreated;
 	}
@@ -66,14 +72,14 @@ public class FilesUtil {
 		File strFile = null;
 		String contenido = "";
 		String text = "";
-
+		BufferedReader reader = null;
 		try {
 
 			strFile = new File(nombreArchivo);
 			// Si el Archivo Existe
 			if (strFile.exists() && strFile.isFile()) {
 				// Leer Archivo
-				BufferedReader reader = new BufferedReader(new FileReader(nombreArchivo));
+				reader = new BufferedReader(new FileReader(nombreArchivo));
 				while ((text = reader.readLine()) != null) {
 					contenido = contenido + text;
 				}
@@ -82,6 +88,8 @@ public class FilesUtil {
 		} catch (Exception e) {
 			System.err.println(e);
 			contenido = "";
+		} finally {
+			reader.close();
 		}
 		return contenido;
 	}

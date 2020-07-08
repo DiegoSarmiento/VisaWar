@@ -14,7 +14,7 @@ public class PagoEfectivoSpringApplication {
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(PagoEfectivoSpringApplication.class, args);
+		SpringApplication.run(PagoEfectivoSpringApplication.class);
 	}
 
 }
